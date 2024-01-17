@@ -26,6 +26,11 @@ Welcome to the Web App DevOps Project repo! This application allows you to effic
 
 - **Data Validation:** Ensure data accuracy and completeness with required fields, date restrictions, and card number validation.
 
+- **Delivery Date:** View order delivery date. <br>
+This feature was reverted. To use again **{git log --all --graph}** -> find commit hash -> **{git revert hash}**. <br>
+You can find the reverted feature also at. **{feature/add-delivery-date}**
+
+
 ## Getting Started
 
 ### Prerequisites
