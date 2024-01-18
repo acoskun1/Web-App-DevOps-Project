@@ -58,6 +58,86 @@ To run the application, you simply need to run the `app.py` script in this repos
 
 - **Database:** The application employs an Azure SQL Database as its database system to store order-related data.
 
+### Containerisation
+
+1. **Create Dockerfile:** Dockerfile is used to build the docker image which contains the application and necessary dependencies.<br>
+Alternative versions of Python3.8 and above can be used as a base image.<br>
+
+        FROM python:3.10-slim (example)
+
+    To set the working directory of the application within the container:
+
+        WORKDIR /app
+
+    To copy the application to the working directory:
+
+        COPY <local_location> <container_location>
+    
+    To install system dependencies:
+
+        # Install system dependencies and ODBC driver
+        RUN apt-get update && apt-get install -y \
+            unixodbc unixodbc-dev odbcinst odbcinst1debian2 libpq-dev gcc && \
+            apt-get install -y gnupg && \
+            apt-get install -y wget && \
+            wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+            wget -qO- https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+            apt-get update && \
+            ACCEPT_EULA=Y apt-get install -y msodbcsql18 && \
+            apt-get purge -y --auto-remove wget && \  
+            apt-get clean
+
+    To install pip, setuptools and python packages specified in requirements.txt:
+
+        RUN pip install --upgrade pip setuptools
+        RUN pip install --trusted-host pypi.python.org -r requirements.txt
+    
+    To expose the application on a port of choice:
+
+        EXPOSE <port_number>
+    
+    To define startup commands
+
+        CMD ["python3", "app.py"]
+
+2. **Build Docker Image:** To build the docker image:
+    
+        ~$ docker build -t <image-name-tag> <dockerfile-location>
+
+    If dockerfile is located in the current working directory type "." for its location.<br>
+    To see the built docker image:
+
+        ~$ docker images -a
+
+3. **Running Containers:** To run container using the above built image:
+
+        ~$ docker run -p <port>:<port> <dockerimage>
+
+4. **Tagging and Pushing Image to Docker Hub** 
+    <br> 
+    - **Tagging**
+
+            docker tag  <image>:<tag> <hub-username>/<image-name>:<tag>
+    - **Pushing**
+
+            docker push <hub-username>/<image-name>:<tag>
+
+5. **Cleanup**
+    <br>
+    1. View running docker containers and copy container id or name: <br>
+
+            ~$ docker ps -a
+    2. Remove docker container: <br>
+
+            ~$ docker rm <container-id>
+
+    3. Remove docker image: <br>
+
+            ~$ docker images
+            ~$ docker rmi <image-id>
+
+
+
 ## Contributors 
 
 - [Maya Iuga]([https://github.com/yourusername](https://github.com/maya-a-iuga))
