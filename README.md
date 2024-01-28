@@ -136,6 +136,65 @@ Alternative versions of Python3.8 and above can be used as a base image.<br>
             ~$ docker images
             ~$ docker rmi <image-id>
 
+### IaC - Infrastructure as Code - Terraform 
+
+1. **Create Project Structure:** Inside the project directory create a parent directory called "aks-terraform" and subdirectories namely "networking-module" and "aks-cluster-module"
+
+       ├── aks-terraform
+       │   ├── aks-cluster-module
+       │   └── networking-module
+       │       ├── main.tf
+       │       ├── outputs.tf
+       │       └── variables.tf 
+
+2. **Create Respective Files:** Inside each module create required files: main.tf, variables.tf, and outputs.tf.</br>
+    - variables.tf: defines the default values for variables that are used inside the main file.
+    - main.tf: defines the resources using default values of variables from variables.tf.
+    - outputs.tf: defines the output values when resource output is called.
+
+    2.1. **Creating Networking Resources:**
+
+    1. Define terraform resource block and provider.
+    2. Define resource group, VNet space, subnets.
+    3. Define network security group
+    
+        When defining network security group specify resource group and location
+        You can create many security rules under the same security group by following the below syntax:
+
+                security_rule {
+                name = "kube-apiserver-rule"
+                priority = 1001
+                direction = "Inbound"
+                access = "Allow"
+                protocol = "Tcp"
+                source_port_range = "*"
+                destination_port_range = "6443"
+                source_address_prefix = var.public_ip_address
+                destination_address_prefix = "*"
+            }
+
+            security_rule {
+                    name = "ssh-rule"
+                    priority = 1002
+                    direction = "Inbound"
+                    access = "Allow"
+                    protocol = "Tcp"
+                    source_port_range = "*"
+                    destination_port_range = "22"
+                    source_address_prefix = var.public_ip_address
+                    destination_address_prefix = "*"
+            } 
+
+            ...
+
+
+3. **Initialize Module:** To initialize a module call:</br>
+
+        terraform init
+    
+
+
+
 
 
 ## Contributors 
