@@ -1,0 +1,3 @@
+aks-terraform/networking-module/.terraform
+aks-terraform/networking-module/.terraform/*
+aks-terraform/networking-module/.terraform.lock.hcl
