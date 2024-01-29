@@ -187,7 +187,7 @@ Alternative versions of Python3.8 and above can be used as a base image.<br>
 
             ...
 
-3. **Initialize Module:** To initialize a module call:</br>
+3. **Initialize Module:** To initialize a module call :</br>
 
         terraform init
     
